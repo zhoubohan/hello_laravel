@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Models\User;
+use Auth;
 
 class UsersController extends Controller
 {
@@ -32,6 +33,8 @@ class UsersController extends Controller
             'password' => bcrypt($request->password),
         ]);
 
+        //注册后自动登陆
+        Auth::login($user);
         //添加session信息
         session()->flash('success', '欢迎来到IRENE APP,祝您体验愉快');
 

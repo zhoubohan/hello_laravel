@@ -8523,3 +8523,13 @@ select,
   margin-bottom: 15px;
 }
 
+/* logout */
+
+#logout {
+  cursor: default;
+}
+
+#logout:hover {
+  background-color: transparent;
+}
+
