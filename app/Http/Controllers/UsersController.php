@@ -6,13 +6,14 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Models\User;
 use Auth;
+use Mail;
 
 class UsersController extends Controller
 {
     public function __construct()
     {
         $this->middleware('auth', [
-            'except' => ['show', 'create', 'store','index'],
+            'except' => ['show', 'create', 'store','index', 'confirmEmail'],
         ]);
 
         $this->middleware('guest',[
@@ -50,13 +51,46 @@ class UsersController extends Controller
             'password' => bcrypt($request->password),
         ]);
 
-        //注册后自动登陆
-        Auth::login($user);
-        //添加session信息
-        session()->flash('success', '欢迎来到IRENE APP,祝您体验愉快');
 
+        $this->sendEmailConfirmationTo($user);
+        session()->flash('success', '验证邮件已发送到你的注册邮箱上，请注意查收。');
+        return redirect('/');
+//        //注册后自动登陆
+//        Auth::login($user);
+//        //添加session信息
+
+//        session()->flash('success', '欢迎来到IRENE APP,祝您体验愉快');
+//
+//        return redirect()->route('users.show', [$user]);
+    }
+
+    protected function sendEmailConfirmationTo($user)
+    {
+        $view = 'emails.confirm';
+        $data = compact('user');
+        $from = 'irene@irene.com';
+        $name = 'irene';
+        $to = $user->email;
+        $subject = "感谢您注册IRENE APP,请确认您的邮箱";
+
+        Mail::send($view, $data, function ($message) use ($from, $name, $to, $subject){
+            $message->from($from, $name)->to($to)->subject($subject);
+        });
+    }
+
+    public function confirmEmail($token)
+    {
+        $user = User::where('activation_token', $token)->firstOrFail();
+
+        $user->activated = true;
+        $user->activation_token = null;
+        $user->save();
+
+        Auth::login($user);
+        session()->flash('success', '恭喜你,激活成功');
         return redirect()->route('users.show', [$user]);
     }
+
 
     public function edit(User $user)
     {
