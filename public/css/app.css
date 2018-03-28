@@ -8533,3 +8533,37 @@ select,
   background-color: transparent;
 }
 
+/* Users edit */
+
+.gravatar_edit {
+  margin: 15px auto;
+  text-align: center;
+}
+
+.gravatar_edit .gravatar {
+  float: none;
+  max-width: 100px;
+}
+
+/* users index */
+
+.users {
+  list-style: none;
+  margin: 0;
+  padding-left: 0;
+}
+
+.users li {
+  border: 1px solid #eeeeee;
+  padding: 10px 0;
+  overflow: auto;
+}
+
+/* delete-btn */
+
+.delete-btn {
+  float: right;
+  position: relative;
+  right: 10px;
+}
+

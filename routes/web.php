@@ -21,6 +21,7 @@ Route::get('signup', 'UsersController@create')->name('signup');
 //user相关路由
 Route::resource('users', 'UsersController');
 
+
 //会话控制
 Route::get('login', 'SessionsController@create')->name('login');
 Route::post('login', 'SessionsController@store')->name('login');
